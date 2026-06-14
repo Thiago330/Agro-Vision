@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroVision Enterprise | Plataforma Tecnológica para o Agronegócio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            dark: '#050906',
+                            card: '#0D1510',
+                            green: '#0E3A20',
+                            lightgreen: '#1E6B3E',
+                            neon: '#10B981',
+                            gold: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-agro-dark text-gray-100 min-h-screen overflow-x-hidden antialiased">
+
+    <div class="bg-black/60 border-b border-white/5 py-2 px-4 text-xs font-mono backdrop-blur-sm fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex gap-4 items-center">
+                <span class="text-agro-neon"><i class="fa-solid fa-circle-dot animate-pulse"></i> STATUS: SERVER ONLINE</span>
+                <span class="hidden sm:inline text-gray-500">|</span>
+                <span class="hidden sm:inline text-gray-400">v2.4.0-stable</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="openModal('login-modal')" class="bg-white/5 hover:bg-agro-neon/20 border border-white/10 px-3 py-1 rounded-md text-agro-neon font-bold transition-all">
+                    <i class="fa-solid fa-right-to-bracket mr-1"></i> Dashboard Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <header class="fixed top-8 left-0 w-full z-40 bg-agro-dark/80 backdrop-blur-md border-b border-white/5 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-10 h-10 bg-gradient-to-tr from-agro-neon to-agro-gold rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-agro-neon/20">
+                    AV
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight text-white">Agro<span class="text-agro-neon">Vision</span></span>
+            </div>
+            
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold tracking-wider uppercase text-gray-400">
+                <a href="#home" class="hover:text-agro-neon transition-colors">Início</a>
+                <a href="#mapa-inteligente" class="hover:text-agro-neon transition-colors">Monitoramento</a>
+                <a href="#marketplace" class="hover:text-agro-neon transition-colors">Marketplace</a>
+                <a href="#ia-diagnostico" class="hover:text-agro-neon transition-colors">IA Vision</a>
+                <a href="#solucoes" class="hover:text-agro-neon transition-colors">Soluções</a>
+                <a href="#contato" class="hover:text-agro-neon transition-colors">Contato</a>
+            </nav>
+
+            <div>
+                <a href="#marketplace" class="bg-gradient-to-r from-agro-lightgreen to-agro-green hover:from-agro-neon hover:to-agro-lightgreen text-white px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-md border border-agro-neon/20">
+                    <i class="fa-solid fa-basket-shopping mr-2"></i>Acessar Loja
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-28">
+        <section id="home" class="relative min-h-[85vh] flex items-center justify-center py-12 overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.06),transparent_50%)]"></div>
+            <div class="absolute inset-0 z-0 opacity-15 bg-[url('https://images.unsplash.com/photo-1625246333195-78d9c38ad451?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-overlay"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="space-y-8 lg:col-span-7">
+                    <div class="inline-flex items-center gap-2 bg-agro-green/30 border border-agro-lightgreen/40 px-4 py-2 rounded-full text-xs font-bold text-agro-neon uppercase tracking-widest backdrop-blur-sm">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agro-neon opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-agro-neon"></span>
+                        </span>
+                        The Next-Gen AgTech Matrix
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                        Inteligência de dados que multiplica a <span class="bg-gradient-to-r from-agro-neon to-agro-gold bg-clip-text text-transparent">safra brasileira</span>.
+                    </h1>
+                    <p class="text-lg text-gray-400 max-w-2xl">
+                        A AgroVision é um ecossistema integrado para o produtor moderno: combinamos Visão Computacional para detecção de pragas, telemetria via satélite e um ecossistema B2B de marketplace.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#mapa-inteligente" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-agro-neon/20 flex items-center gap-2">
+                            <i class="fa-solid fa-satellite"></i> Ver Monitoramento
+                        </a>
+                        <a href="#marketplace" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2">
+                            <i class="fa-solid fa-store"></i> Ir para o Marketplace
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative lg:col-span-5 w-full">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-agro-neon/10 to-agro-gold/10 rounded-3xl blur-2xl"></div>
+                    <div class="relative bg-agro-card border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+                            <div class="flex items-center gap-2 font-mono text-xs text-gray-400">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                <span class="ml-1">agrovision_bi_core.sys</span>
+                            </div>
+                            <span class="text-[10px] font-mono bg-agro-neon/10 text-agro-neon px-2 py-0.5 rounded border border-agro-neon/20 font-bold">PITCH LIVE DATA</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
+                                <span class="text-xs text-gray-400 block mb-1">Média de ROI Produtor</span>
+                                <span class="text-2xl font-black text-white font-mono">+32.6%</span>
+                            </div>
+                            <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
+                                <span class="text-xs text-gray-400 block mb-1">Redução de Custos</span>
+                                <span class="text-2xl font-black text-agro-neon font-mono">24%</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-gray-400 block mb-1">Área Ativa Mapeada</span>
+                                <span class="text-sm font-bold text-white font-mono">1,420,580 Hectares</span>
+                            </div>
+                            <i class="fa-solid fa-chart-line text-agro-gold text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mapa-inteligente" class="py-24 border-t border-white/5 bg-agro-card/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="inline-block bg-agro-neon/10 border border-agro-neon/20 text-agro-neon px-3 py-1 rounded-md text-xs font-mono font-bold">GEOPROCESSAMENTO SATELITAL</div>
+                        <h2 class="text-3xl font-bold tracking-tight text-white">Macro-monitoramento de Safras Brasileiras</h2>
+                        <p class="text-sm text-gray-400">Filtre dados em tempo real sobre as principais regiões produtoras do país através de camadas de telemetria.</p>
+                        <div class="space-y-3 font-mono text-xs">
+                            <button onclick="changeRegion('centro-oeste', 'Mato Grosso & Goiás', 'Região Centro-Oeste registrando recorde de produção de soja com colheita em 94%. Solo com excelentes índices de nitrogênio.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
+                                <span>🌾 Centro-Oeste (Grãos)</span>
+                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
+                            </button>
+                            <button onclick="changeRegion('sudeste', 'São Paulo & Minas Gerais', 'Região Sudeste com foco em Café e Citros. Condições climáticas ideais reportadas pelo satélite com umidade estável.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
+                                <span>☕ Sudeste (Café & Citros)</span>
+                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
+                            </button>
+                            <button onclick="changeRegion('sul', 'Rio Grande do Sul & Paraná', 'Alerta de estiagem pontual nas fronteiras ao Sul. Monitoramento recomenda ativação preventiva do sistema de pivôs.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
+                                <span>🍇 Sul (Cereais & Viticultura)</span>
+                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 bg-black/40 border border-white/10 rounded-3xl p-6 min-h-[480px] flex flex-col justify-between relative overflow-hidden group shadow-inner">
+                        <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                            <span class="text-xs font-mono text-gray-500"><i class="fa-solid fa-earth-americas mr-1"></i> LAYER FEED: BRAZIL_GEOMAP_2026</span>
+                            <span class="text-[10px] font-mono text-agro-dark bg-agro-neon px-2.5 py-0.5 rounded font-bold" id="region-badge">CENTRO-OESTE</span>
+                        </div>
+                        
+                        <div class="my-8 flex flex-col md:flex-row items-center justify-around gap-8">
+                            <div class="relative w-64 h-64 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-center font-bold text-gray-600 shadow-inner overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-agro-green/20 to-transparent"></div>
+                                <i class="fa-solid fa-map-location-dot text-7xl text-agro-neon/40 animate-pulse"></i>
+                                <div class="absolute bottom-2 left-2 bg-black/60 px-2 py-1 rounded text-[10px] font-mono text-gray-400">Lat: -15.79 | Lon: -47.88</div>
+                            </div>
+                            <div class="flex-1 space-y-3 max-w-sm">
+                                <h4 class="text-lg font-bold text-white" id="region-title">Mato Grosso & Goiás</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed font-mono text-xs" id="region-description">
+                                    Região Centro-Oeste registrando recorde de produção de soja com colheita em 94%. Solo com excelentes índices de nitrogênio.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-agro-card border border-white/5 rounded-xl p-3 text-xs font-mono text-gray-400 flex justify-between items-center">
+                            <span><i class="fa-solid fa-satellite-dish text-agro-gold mr-1"></i> Satélite: Sentinel-2 Ativo</span>
+                            <span class="text-agro-neon font-bold">Dados Operacionais</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="marketplace" class="py-24 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+                    <div class="space-y-2">
+                        <div class="inline-block bg-agro-gold/10 border border-agro-gold/20 text-agro-gold px-3 py-1 rounded-md text-xs font-mono font-bold">ECOSSISTEMA DE VENDAS B2B</div>
+                        <h2 class="text-3xl font-extrabold tracking-tight text-white">Marketplace AgroVision</h2>
+                        <p class="text-sm text-gray-400">Soluções tecnológicas de ponta e insumos agrícolas homologados com entrega garantida.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 p-2 rounded-xl text-xs font-mono font-bold flex gap-4">
+                        <span>Carrinho: <span class="text-agro-neon" id="cart-count">0</span> itens</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
+                                🛸
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Drones & Hardware</span>
+                                <h3 class="text-base font-bold text-white mt-1">Drone Multiespectral Vision-X</h3>
+                                <p class="text-xs text-gray-400 mt-1">Mapeamento aéreo completo de estresse hídrico e NDVI.</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-lg font-black text-white font-mono">R$ 14.500</span>
+                            <button onclick="addToCart('Drone Vision-X')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
+                                🌡️
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">IoT / Sensores</span>
+                                <h3 class="text-base font-bold text-white mt-1">Sensor de Solo Subterrâneo Pro</h3>
+                                <p class="text-xs text-gray-400 mt-1">Mede umidade, salinidade e temperatura de hora em hora.</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-lg font-black text-white font-mono">R$ 890<span class="text-xs text-gray-400 font-normal">/un</span></span>
+                            <button onclick="addToCart('Sensor Pro')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
+                                🧪
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Bioinsumos</span>
+                                <h3 class="text-base font-bold text-white mt-1">BioFertilizante UltraN-10</h3>
+                                <p class="text-xs text-gray-400 mt-1">Acelerador biológico orgânico focado em alta produtividade.</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-lg font-black text-white font-mono">R$ 2.400<span class="text-xs text-gray-400 font-normal">/ton</span></span>
+                            <button onclick="addToCart('BioFertilizante')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
+                                📡
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Conectividade</span>
+                                <h3 class="text-base font-bold text-white mt-1">Antena Campo-Sat Rural</h3>
+                                <p class="text-xs text-gray-400 mt-1">Roteador via satélite robusto para áreas sem cobertura móvel.</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-lg font-black text-white font-mono">R$ 3.100</span>
+                            <button onclick="addToCart('Antena Satelital')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
+                                <i class="fa-solid fa-cart-plus"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ia-diagnostico" class="py-24 bg-gradient-to-b from-agro-dark to-black/60 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 class="text-xs font-bold text-agro-neon uppercase tracking-widest">Fisiosanidade Computacional</h2>
+                    <p class="text-3xl font-bold tracking-tight text-white">IA Diagnóstica de Fitopatologias</p>
+                    <p class="text-gray-400">Simule a análise de campo enviando amostras foliares para nossa rede neural.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="bg-white/[0.02] border border-white/10 rounded-3xl p-8 flex flex-col justify-between items-center text-center border-dashed border-gray-600 hover:border-agro-neon transition-all cursor-pointer" onclick="simulateAIAnalysis()">
+                        <div class="my-auto space-y-4">
+                            <div class="w-16 h-16 bg-agro-neon/10 text-agro-neon rounded-2xl flex items-center justify-center text-2xl mx-auto border border-agro-neon/20">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
+                            <div>
+                                <p class="text-base font-bold text-white">Simular Envio de Foto Foliar</p>
+                                <p class="text-xs text-gray-500 mt-1">Carregar espécime de Soja, Milho ou Algodão</p>
+                            </div>
+                        </div>
+                        <p class="text-[11px] font-mono text-agro-gold bg-agro-gold/10 px-3 py-1 rounded-full mt-6">Clique no card para disparar análise preditiva</p>
+                    </div>
+                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 space-y-4" id="ia-report-box">
+                        <div class="border-b border-white/5 pb-4 flex justify-between items-center">
+                            <span class="text-xs font-mono text-gray-400">VISION_REPORTS_V4</span>
+                            <span class="text-xs font-mono text-gray-500" id="report-status">Aguardando Amostra...</span>
+                        </div>
+                        <div class="space-y-4 font-mono text-xs text-gray-400" id="report-content">
+                            <p class="text-center py-12 text-gray-600">Nenhuma amostra processada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solucoes" class="py-24 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                    <h2 class="text-xs font-bold text-agro-neon uppercase tracking-widest">Matriz Comercial</h2>
+                    <p class="text-3xl font-bold tracking-tight text-white">Nossos Pilares Tecnológicos</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
+                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h3 class="text-lg font-bold text-white">Analytics Preditivo</h3>
+                        <p class="text-sm text-gray-400">Modelos matemáticos cruzando dados de clima histórico e sensores locais.</p>
+                    </div>
+                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
+                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3 class="text-lg font-bold text-white">Integração Total APIs</h3>
+                        <p class="text-sm text-gray-400">Conectividade fluida com os principais ERPs e maquinários John Deere e Case.</p>
+                    </div>
+                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
+                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-leaf"></i></div>
+                        <h3 class="text-lg font-bold text-white">Foco ESG & Carbono</h3>
+                        <p class="text-sm text-gray-400">Certificação e relatórios para crédito de carbono rural automatizados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="py-24 border-t border-white/5 bg-agro-card/20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-block bg-agro-neon/10 border border-agro-neon/20 text-agro-neon px-3 py-1 rounded-md text-xs font-mono font-bold">STARTUP HUB CONEXÃO</div>
+                        <h2 class="text-4xl font-extrabold tracking-tight text-white">Fale com nossa equipe institucional</h2>
+                        <p class="text-sm text-gray-400">Seja você um investidor de Venture Capital, parceiro corporativo ou grande produtor rural, mande uma mensagem para receber nosso Pitch Deck comercial completo.</p>
+                        <div class="space-y-4 font-mono text-xs text-gray-400">
+                            <div class="flex items-center gap-3"><i class="fa-solid fa-envelope text-agro-neon text-base"></i> contato@agrovision.co</div>
+                            <div class="flex items-center gap-3"><i class="fa-solid fa-phone text-agro-neon text-base"></i> +55 (11) 99999-8888</div>
+                            <div class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-agro-neon text-base"></i> San Pedro Valley, Belo Horizonte - MG</div>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-7 bg-agro-card border border-white/10 p-8 rounded-3xl shadow-xl">
+                        <form id="contact-form" onsubmit="handleContact(event)" class="space-y-4 font-mono text-xs">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-400 mb-1">Seu Nome</label>
+                                    <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-400 mb-1">Seu E-mail corporate</label>
+                                    <input type="email" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-1">Perfil Corporativo</label>
+                                <select class="w-full bg-agro-dark border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon cursor-pointer">
+                                    <option value="produtor">Produtor Rural Enterprise</option>
+                                    <option value="investidor">Venture Capital / Investidor</option>
+                                    <option value="parceiro">Distribuidor / Fabricante</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-1">Mensagem ou Intenção comercial</label>
+                                <textarea rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-agro-neon hover:bg-emerald-500 text-agro-dark font-extrabold py-3.5 rounded-xl transition-all uppercase tracking-wider text-xs">
+                                <i class="fa-solid fa-paper-plane mr-2"></i>Enviar Solicitação
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black py-8 border-t border-white/5 text-center font-mono text-[11px] text-gray-500">
+        <p>&copy; 2026 AgroVision AgTech S.A. Todos os direitos reservados. Made for Tech Pitch Boards.</p>
+    </footer>
+
+    <div id="login-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-agro-card border border-white/10 rounded-3xl p-8 max-w-sm w-full mx-4 relative space-y-6">
+            <button onclick="closeModal('login-modal')" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-lg">&times;</button>
+            <div class="text-center">
+                <h3 class="text-xl font-bold text-white">Acesse o Ecossistema</h3>
+                <p class="text-xs text-gray-400 mt-1">Selecione o método de entrada corporativa</p>
+            </div>
+            
+            <div class="space-y-3 font-mono text-xs">
+                <button onclick="handleGoogleLogin()" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 text-xs border border-gray-300">
+                    <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" alt="Google Logo" class="w-4 h-4">
+                    Entrar com o Google
+                </button>
+                
+                <div class="relative flex py-2 items-center text-gray-500 text-[10px] uppercase font-bold">
+                    <div class="flex-grow border-t border-white/5"></div>
+                    <span class="flex-shrink mx-4">Ou via credencial</span>
+                    <div class="flex-grow border-t border-white/5"></div>
+                </div>
+
+                <div>
+                    <input type="text" placeholder="ID do Produtor (NIRF)" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
+                </div>
+                <div>
+                    <input type="password" placeholder="Chave de Acesso" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
+                </div>
+                <button onclick="alert('Autenticação padrão simulada!')" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-[11px] mt-2">
+                    Entrar via Intranet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

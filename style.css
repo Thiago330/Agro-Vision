@@ -1,0 +1,34 @@
+/* Customizações Avançadas de Interface e Animações */
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transição suave ao trocar de tema */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300s;
+}
+
+/* Suavização de scroll da página */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Esconder barra de rolagem mantendo a funcionalidade */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+    background: #10B981;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #1E6B3E;
+}
