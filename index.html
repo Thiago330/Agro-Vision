@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroVision Enterprise | Plataforma Tecnológica para o Agronegócio</title>
+    <title>AgroVision |</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,424 +12,813 @@
                 extend: {
                     colors: {
                         agro: {
-                            dark: '#050906',
-                            card: '#0D1510',
-                            green: '#0E3A20',
-                            lightgreen: '#1E6B3E',
-                            neon: '#10B981',
-                            gold: '#F59E0B'
+                            bg: '#020604',
+                            surface: '#070F0B',
+                            card: '#0D1912',
+                            border: '#1F382A',
+                            primary: '#10B981',
+                            secondary: '#34D399',
+                            accent: '#F59E0B',
+                            alert: '#EF4444'
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     }
                 }
             }
         }
     </script>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020604; color: #E4E7EB; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #020604; }
+        ::-webkit-scrollbar-thumb { background: #1F382A; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10B981; }
+        .glass { backdrop-filter: blur(12px); background-color: rgba(7, 15, 11, 0.85); }
+        .glow-green:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
     </style>
 </head>
-<body class="bg-agro-dark text-gray-100 min-h-screen overflow-x-hidden antialiased">
+<body class="overflow-x-hidden antialiased selection:bg-agro-primary selection:text-black">
 
-    <div class="bg-black/60 border-b border-white/5 py-2 px-4 text-xs font-mono backdrop-blur-sm fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex gap-4 items-center">
-                <span class="text-agro-neon"><i class="fa-solid fa-circle-dot animate-pulse"></i> STATUS: SERVER ONLINE</span>
-                <span class="hidden sm:inline text-gray-500">|</span>
-                <span class="hidden sm:inline text-gray-400">v2.4.0-stable</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <button onclick="openModal('login-modal')" class="bg-white/5 hover:bg-agro-neon/20 border border-white/10 px-3 py-1 rounded-md text-agro-neon font-bold transition-all">
-                    <i class="fa-solid fa-right-to-bracket mr-1"></i> Dashboard Login
-                </button>
+    <div class="w-full bg-black/90 border-b border-agro-border/40 py-1.5 px-6 text-[10px] font-mono fixed top-0 z-50 backdrop-blur-md flex justify-between items-center tracking-wider text-gray-400">
+        <div class="flex items-center gap-4">
+            <span class="text-agro-primary flex items-center gap-1.5 font-bold">
+                <span class="w-2 h-2 rounded-full bg-agro-primary animate-ping"></span> AETHEL_OS v4.12_LIVE
+            </span>
+            <span class="hidden md:inline text-gray-700">|</span>
+            <span class="hidden md:inline flex items-center gap-1"><i class="fa-solid fa-satellite"></i> TELEMETRIA INPE/SENTINEL ACTIVATED</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="cursor-pointer hover:text-white transition-colors" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie text-agro-accent"></i> Telemetria Realtime</span>
+            <span class="text-gray-700">|</span>
+            <span class="cursor-pointer hover:text-white transition-colors" onclick="openFavModal()"><i class="fa-solid fa-heart text-agro-alert"></i> Favoritos (<span id="fav-counter" class="text-white">0</span>)</span>
+            <span class="text-gray-700">|</span>
+            <div class="bg-agro-border/60 border border-agro-primary/30 px-2 py-0.5 rounded text-agro-primary flex items-center gap-1 font-bold">
+                <i class="fa-solid fa-cart-shopping"></i> CART: <span id="cart-counter" class="text-white">0</span>
             </div>
         </div>
     </div>
 
-    <header class="fixed top-8 left-0 w-full z-40 bg-agro-dark/80 backdrop-blur-md border-b border-white/5 transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <header class="w-full fixed top-8 left-0 z-40 bg-agro-bg/80 border-b border-agro-border/50 backdrop-blur-lg transition-all">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="w-10 h-10 bg-gradient-to-tr from-agro-neon to-agro-gold rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-agro-neon/20">
-                    AV
+                <div class="w-10 h-10 bg-gradient-to-br from-agro-primary to-emerald-500 rounded-xl flex items-center justify-center text-black font-extrabold text-xl shadow-lg shadow-agro-primary/20">
+                    Æ
                 </div>
-                <span class="text-2xl font-extrabold tracking-tight text-white">Agro<span class="text-agro-neon">Vision</span></span>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight text-white block">Aethel <span class="text-agro-primary font-light">AgroOS</span></span>
+                    <span class="text-[9px] font-mono uppercase tracking-widest text-gray-500 block">Sustainable Precision Platform</span>
+                </div>
             </div>
             
-            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold tracking-wider uppercase text-gray-400">
-                <a href="#home" class="hover:text-agro-neon transition-colors">Início</a>
-                <a href="#mapa-inteligente" class="hover:text-agro-neon transition-colors">Monitoramento</a>
-                <a href="#marketplace" class="hover:text-agro-neon transition-colors">Marketplace</a>
-                <a href="#ia-diagnostico" class="hover:text-agro-neon transition-colors">IA Vision</a>
-                <a href="#solucoes" class="hover:text-agro-neon transition-colors">Soluções</a>
-                <a href="#contato" class="hover:text-agro-neon transition-colors">Contato</a>
+            <nav class="hidden lg:flex items-center gap-8 text-xs font-semibold tracking-widest uppercase text-gray-400">
+                <a href="#solucoes" class="hover:text-white transition-colors">Matriz de Resolução</a>
+                <a href="#mapa-hub" class="hover:text-white transition-colors">Geomatrix Brasil</a>
+                <a href="#dashboard" class="hover:text-white transition-colors">Enterprise Analytics</a>
+                <a href="#ai-terminal" class="hover:text-white transition-colors">Módulo IA</a>
+                <a href="#marketplace" class="hover:text-white transition-colors">B2B Marketplace</a>
+                <a href="#conhecimento" class="hover:text-white transition-colors">Knowledge Hub</a>
             </nav>
 
-            <div>
-                <a href="#marketplace" class="bg-gradient-to-r from-agro-lightgreen to-agro-green hover:from-agro-neon hover:to-agro-lightgreen text-white px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-md border border-agro-neon/20">
-                    <i class="fa-solid fa-basket-shopping mr-2"></i>Acessar Loja
+            <div class="flex items-center gap-3">
+                <a href="#ai-terminal" class="bg-agro-primary/10 border border-agro-primary/40 hover:bg-agro-primary hover:text-black text-agro-primary px-4 py-2.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all duration-300">
+                    <i class="fa-solid fa-brain mr-1.5"></i> Terminal IA
                 </a>
             </div>
         </div>
     </header>
 
     <main class="pt-28">
-        <section id="home" class="relative min-h-[85vh] flex items-center justify-center py-12 overflow-hidden">
-            <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.06),transparent_50%)]"></div>
-            <div class="absolute inset-0 z-0 opacity-15 bg-[url('https://images.unsplash.com/photo-1625246333195-78d9c38ad451?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-overlay"></div>
+
+        <section class="relative min-h-[80vh] flex items-center justify-center py-16 px-6 overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(16,185,129,0.08),transparent_50%)]"></div>
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
             
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div class="space-y-8 lg:col-span-7">
-                    <div class="inline-flex items-center gap-2 bg-agro-green/30 border border-agro-lightgreen/40 px-4 py-2 rounded-full text-xs font-bold text-agro-neon uppercase tracking-widest backdrop-blur-sm">
-                        <span class="flex h-2 w-2 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agro-neon opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-agro-neon"></span>
-                        </span>
-                        The Next-Gen AgTech Matrix
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full relative z-10">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-agro-card border border-agro-border px-4 py-1.5 rounded-full text-[10px] font-mono text-agro-primary uppercase tracking-widest">
+                        <i class="fa-solid fa-microchip animate-pulse"></i> Agronegócio Soberano e Orientado a Dados
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-                        Inteligência de dados que multiplica a <span class="bg-gradient-to-r from-agro-neon to-agro-gold bg-clip-text text-transparent">safra brasileira</span>.
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                        A infraestrutura inteligente do <span class="text-transparent bg-clip-text bg-gradient-to-r from-agro-primary to-emerald-400">Campo ao Futuro</span>.
                     </h1>
-                    <p class="text-lg text-gray-400 max-w-2xl">
-                        A AgroVision é um ecossistema integrado para o produtor moderno: combinamos Visão Computacional para detecção de pragas, telemetria via satélite e um ecossistema B2B de marketplace.
+                    <p class="text-base text-gray-400 max-w-xl leading-relaxed">
+                        Uma plataforma unificada de nível corporativo que funde telemetria avançada, inteligência artificial preditiva, canais logísticos inteligentes e distribuição científica para maximizar a governança e produtividade no agronegócio.
                     </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#mapa-inteligente" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-agro-neon/20 flex items-center gap-2">
-                            <i class="fa-solid fa-satellite"></i> Ver Monitoramento
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="#dashboard" class="bg-agro-primary hover:bg-emerald-500 text-black px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-agro-primary/10">
+                            <i class="fa-solid fa-chart-line mr-2"></i>Iniciar Painel de Controle
                         </a>
-                        <a href="#marketplace" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2">
-                            <i class="fa-solid fa-store"></i> Ir para o Marketplace
+                        <a href="#marketplace" class="bg-agro-card hover:bg-agro-surface/40 border border-agro-border text-white px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all">
+                            <i class="fa-solid fa-store mr-2"></i>Acessar Pregão B2B
                         </a>
                     </div>
                 </div>
-
-                <div class="relative lg:col-span-5 w-full">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-agro-neon/10 to-agro-gold/10 rounded-3xl blur-2xl"></div>
-                    <div class="relative bg-agro-card border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
-                            <div class="flex items-center gap-2 font-mono text-xs text-gray-400">
-                                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                                <span class="ml-1">agrovision_bi_core.sys</span>
+                <div class="lg:col-span-5">
+                    <div class="border border-agro-border bg-agro-surface rounded-2xl p-6 shadow-2xl relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-b from-agro-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="flex justify-between items-center border-b border-agro-border/60 pb-4 mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-agro-primary"></div>
+                                <span class="font-mono text-xs font-bold text-white">INDICADORES DE MERCADO</span>
                             </div>
-                            <span class="text-[10px] font-mono bg-agro-neon/10 text-agro-neon px-2 py-0.5 rounded border border-agro-neon/20 font-bold">PITCH LIVE DATA</span>
+                            <span class="text-[10px] font-mono text-agro-accent bg-agro-accent/10 px-2 py-0.5 rounded">REALTIME</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
-                                <span class="text-xs text-gray-400 block mb-1">Média de ROI Produtor</span>
-                                <span class="text-2xl font-black text-white font-mono">+32.6%</span>
+                        <div class="space-y-4 font-mono text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">SOJA (SCA / BM&F):</span>
+                                <span class="text-white font-bold">R$ 138,40 <span class="text-agro-primary text-[10px] ml-1"><i class="fa-solid fa-arrow-trend-up"></i> +1.2%</span></span>
                             </div>
-                            <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
-                                <span class="text-xs text-gray-400 block mb-1">Redução de Custos</span>
-                                <span class="text-2xl font-black text-agro-neon font-mono">24%</span>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">BOI GORDO (@ / SP):</span>
+                                <span class="text-white font-bold">R$ 232,15 <span class="text-agro-alert text-[10px] ml-1"><i class="fa-solid fa-arrow-trend-down"></i> -0.4%</span></span>
                             </div>
-                        </div>
-                        <div class="mt-4 bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex items-center justify-between">
-                            <div>
-                                <span class="text-xs text-gray-400 block mb-1">Área Ativa Mapeada</span>
-                                <span class="text-sm font-bold text-white font-mono">1,420,580 Hectares</span>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">MILHO (SCA / BM&F):</span>
+                                <span class="text-white font-bold">R$ 62,80 <span class="text-agro-primary text-[10px] ml-1"><i class="fa-solid fa-arrow-trend-up"></i> +0.8%</span></span>
                             </div>
-                            <i class="fa-solid fa-chart-line text-agro-gold text-xl"></i>
+                            <div class="border-t border-agro-border/40 pt-3 mt-2 flex justify-between items-center text-[11px]">
+                                <span class="text-gray-400"><i class="fa-solid fa-cloud-sun text-agro-primary mr-1"></i> Previsão Média Matriz:</span>
+                                <span class="text-agro-primary font-bold">24°C • Precipitação Livre</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="mapa-inteligente" class="py-24 border-t border-white/5 bg-agro-card/30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="solucoes" class="py-24 border-t border-agro-border/40 bg-agro-surface/40">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <span class="text-xs font-mono text-agro-primary uppercase tracking-widest">// ENGENHARIA DE MATRIZES OPERACIONAIS</span>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">Desafios Estruturais & Soluções Embarcadas</h2>
+                    <p class="text-sm text-gray-400">Navegue pelas vertentes críticas do agronegócio e veja os mecanismos práticos de mitigação projetados em nosso ecossistema.</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-10 font-mono text-xs">
+                    <button onclick="switchMatrixCategory('agricultura', this)" class="matrix-cat-btn bg-agro-primary text-black px-5 py-3 rounded-xl font-bold transition-all"><i class="fa-solid fa-seedling mr-1.5"></i> Agricultura</button>
+                    <button onclick="switchMatrixCategory('pecuaria', this)" class="matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white"><i class="fa-solid fa-cow mr-1.5"></i> Pecuária</button>
+                    <button onclick="switchMatrixCategory('gestao', this)" class="matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white"><i class="fa-solid fa-chart-gantt mr-1.5"></i> Gestão Rural</button>
+                    <button onclick="switchMatrixCategory('logistica', this)" class="matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white"><i class="fa-solid fa-truck-ramp-box mr-1.5"></i> Logística</button>
+                    <button onclick="switchMatrixCategory('sustentabilidade', this)" class="matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white"><i class="fa-solid fa-leaf mr-1.5"></i> Sustentabilidade</button>
+                    <button onclick="switchMatrixCategory('sociais', this)" class="matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white"><i class="fa-solid fa-users-gear mr-1.5"></i> Problemas Sociais</button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-5 space-y-2.5 font-mono text-xs max-h-[480px] overflow-y-auto pr-2" id="matrix-problems-list">
+                        </div>
+
+                    <div class="lg:col-span-7 bg-agro-card border border-agro-border rounded-2xl p-8 min-h-[420px] flex flex-col justify-between shadow-xl" id="matrix-display-panel">
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-2 text-[10px] font-mono text-agro-alert bg-agro-alert/10 border border-agro-alert/20 px-3 py-1 rounded-md w-fit font-bold uppercase">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Diagnóstico de Gargalo Ativo
+                            </div>
+                            <h3 class="text-xl font-bold text-white" id="matrix-display-title">Selecione um problema ao lado</h3>
+                            <hr class="border-agro-border/50">
+                            <div class="space-y-3">
+                                <span class="text-[11px] font-mono text-agro-primary uppercase tracking-wider block">Arquitetura de Resolução Embarcada:</span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="matrix-display-solutions">
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="border-t border-agro-border/50 pt-4 text-[11px] font-mono text-gray-500 flex justify-between items-center mt-6">
+                            <span><i class="fa-solid fa-shield-halved text-agro-primary mr-1"></i> Mecanismo de Salvaguarda Homologado</span>
+                            <span class="text-white bg-agro-border px-2 py-0.5 rounded text-[10px]">Aethel Core</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mapa-hub" class="py-24 border-t border-agro-border/40">
+            <div class="max-w-7xl mx-auto px-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-4 space-y-6">
-                        <div class="inline-block bg-agro-neon/10 border border-agro-neon/20 text-agro-neon px-3 py-1 rounded-md text-xs font-mono font-bold">GEOPROCESSAMENTO SATELITAL</div>
-                        <h2 class="text-3xl font-bold tracking-tight text-white">Macro-monitoramento de Safras Brasileiras</h2>
-                        <p class="text-sm text-gray-400">Filtre dados em tempo real sobre as principais regiões produtoras do país através de camadas de telemetria.</p>
-                        <div class="space-y-3 font-mono text-xs">
-                            <button onclick="changeRegion('centro-oeste', 'Mato Grosso & Goiás', 'Região Centro-Oeste registrando recorde de produção de soja com colheita em 94%. Solo com excelentes índices de nitrogênio.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
-                                <span>🌾 Centro-Oeste (Grãos)</span>
-                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
-                            </button>
-                            <button onclick="changeRegion('sudeste', 'São Paulo & Minas Gerais', 'Região Sudeste com foco em Café e Citros. Condições climáticas ideais reportadas pelo satélite com umidade estável.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
-                                <span>☕ Sudeste (Café & Citros)</span>
-                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
-                            </button>
-                            <button onclick="changeRegion('sul', 'Rio Grande do Sul & Paraná', 'Alerta de estiagem pontual nas fronteiras ao Sul. Monitoramento recomenda ativação preventiva do sistema de pivôs.')" class="w-full text-left bg-white/5 hover:bg-agro-neon/10 p-3 rounded-xl border border-white/10 block transition-all flex justify-between items-center group">
-                                <span>🍇 Sul (Cereais & Viticultura)</span>
-                                <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-agro-neon"></i>
-                            </button>
+                    <div class="lg:col-span-4 space-y-4">
+                        <span class="text-xs font-mono text-agro-primary uppercase tracking-widest">// MAPA INTELIGENTE GEOMATRIX</span>
+                        <h2 class="text-3xl font-extrabold text-white tracking-tight">Zoneamento e Sensoriamento Nacional</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Acesse dados unificados dos principais biomas e estados produtores. Monitore secas, focos de calor, tipos predominantes de solo e índices consolidados de produtividade agropecuária.
+                        </p>
+                        <div class="space-y-2 pt-2 font-mono text-xs">
+                            <button onclick="triggerMapRegion('co')" class="map-trigger-btn w-full text-left bg-agro-card border border-agro-primary p-3 rounded-xl flex justify-between items-center text-white font-bold"><span class="flex items-center gap-2">🚜 Região Centro-Oeste</span><i class="fa-solid fa-chevron-right text-agro-primary"></i></button>
+                            <button onclick="triggerMapRegion('sp')" class="map-trigger-btn w-full text-left bg-agro-surface border border-agro-border p-3 rounded-xl flex justify-between items-center text-gray-400 hover:text-white transition-colors"><span class="flex items-center gap-2">🌱 Região Sudeste (SP/MG)</span><i class="fa-solid fa-chevron-right text-gray-600"></i></button>
+                            <button onclick="triggerMapRegion('sul')" class="map-trigger-btn w-full text-left bg-agro-surface border border-agro-border p-3 rounded-xl flex justify-between items-center text-gray-400 hover:text-white transition-colors"><span class="flex items-center gap-2">🍇 Região Sul</span><i class="fa-solid fa-chevron-right text-gray-600"></i></button>
+                            <button onclick="triggerMapRegion('ne')" class="map-trigger-btn w-full text-left bg-agro-surface border border-agro-border p-3 rounded-xl flex justify-between items-center text-gray-400 hover:text-white transition-colors"><span class="flex items-center gap-2">🌵 Matopiba & Nordeste</span><i class="fa-solid fa-chevron-right text-gray-600"></i></button>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-8 bg-black/40 border border-white/10 rounded-3xl p-6 min-h-[480px] flex flex-col justify-between relative overflow-hidden group shadow-inner">
-                        <div class="flex justify-between items-center border-b border-white/5 pb-4">
-                            <span class="text-xs font-mono text-gray-500"><i class="fa-solid fa-earth-americas mr-1"></i> LAYER FEED: BRAZIL_GEOMAP_2026</span>
-                            <span class="text-[10px] font-mono text-agro-dark bg-agro-neon px-2.5 py-0.5 rounded font-bold" id="region-badge">CENTRO-OESTE</span>
+                    <div class="lg:col-span-8 bg-agro-surface border border-agro-border rounded-2xl p-6 min-h-[460px] flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(16,185,129,0.03),transparent_50%)]"></div>
+                        <div class="flex flex-wrap gap-4 justify-between items-center border-b border-agro-border/50 pb-4 z-10 relative">
+                            <div>
+                                <span class="text-[10px] font-mono text-gray-500 block">LOCALIDADE ALVO</span>
+                                <h4 class="text-lg font-bold text-white" id="map-region-name">Região Centro-Oeste</h4>
+                            </div>
+                            <div class="flex gap-2 text-[10px] font-mono">
+                                <span class="bg-agro-primary/10 text-agro-primary border border-agro-primary/20 px-2 py-1 rounded">SOLO: LATOSSOLO VERMELHO</span>
+                                <span class="bg-agro-accent/10 text-agro-accent border border-agro-accent/20 px-2 py-1 rounded" id="map-region-alert">RISCO DE SECA: BAIXO</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6 z-10 relative font-mono text-xs">
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Clima Atual:</span>
+                                <span class="text-white font-bold block text-sm" id="map-val-clima">28°C • Úmido</span>
+                            </div>
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Produção Líder:</span>
+                                <span class="text-agro-primary font-bold block text-sm" id="map-val-prod">Soja e Milho Safrinha</span>
+                            </div>
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Pecuária Ativa:</span>
+                                <span class="text-white font-bold block text-sm" id="map-val-pec">Corte (Confinamento)</span>
+                            </div>
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Áreas Críticas / Seca:</span>
+                                <span class="text-white font-bold block text-sm" id="map-val-seca">0.2% Talhões Monitorados</span>
+                            </div>
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Focos de Queimadas:</span>
+                                <span class="text-agro-primary font-bold block text-sm" id="map-val-queima">Zero Detecções Orbitais</span>
+                            </div>
+                            <div class="bg-agro-card border border-agro-border p-4 rounded-xl">
+                                <span class="text-gray-500 block mb-1">Índice Produtividade:</span>
+                                <span class="text-agro-accent font-bold block text-sm" id="map-val-ind">9.4/10 Histórico</span>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-agro-border/50 pt-3 text-[10px] font-mono text-gray-500 flex justify-between items-center z-10 relative">
+                            <span><i class="fa-solid fa-satellite-dish text-agro-primary mr-1"></i> Varredura de órbita efetuada há 14 minutos.</span>
+                            <span class="text-gray-400">EPSG:4674 (SIRGAS 2000)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="py-24 border-t border-agro-border/40 bg-agro-surface/20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+                    <div class="space-y-2">
+                        <span class="text-xs font-mono text-agro-accent uppercase tracking-widest">// PAINÉIS DE CONTROLE DE ALTA GOVERNANÇA</span>
+                        <h2 class="text-3xl font-extrabold text-white tracking-tight">Enterprise Operations Center</h2>
+                        <p class="text-sm text-gray-400">Visão analítica instantânea compreendendo finanças, emissões de carbono, sanidade zootécnica e safras.</p>
+                    </div>
+                    <div class="bg-agro-card border border-agro-border p-1.5 rounded-xl flex gap-1 font-mono text-[11px]">
+                        <span class="bg-agro-primary text-black px-3 py-1.5 rounded-lg font-bold cursor-pointer">Consolidado Corporativo</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 font-mono text-xs">
+                    <div class="bg-agro-card border border-agro-border p-5 rounded-xl">
+                        <div class="text-gray-500 flex justify-between items-center mb-2"><span>PRODUÇÃO TOTAL EST.</span><i class="fa-solid fa-wheat-awn text-agro-primary"></i></div>
+                        <div class="text-xl font-bold text-white">412.850 <span class="text-xs font-light text-gray-400">Sacas</span></div>
+                        <span class="text-[10px] text-agro-primary mt-1 block"><i class="fa-solid fa-chevron-up"></i> +4.8% vs Safra Anterior</span>
+                    </div>
+                    <div class="bg-agro-card border border-agro-border p-5 rounded-xl">
+                        <div class="text-gray-500 flex justify-between items-center mb-2"><span>EBITDA OPERACIONAL</span><i class="fa-solid fa-wallet text-agro-accent"></i></div>
+                        <div class="text-xl font-bold text-white">R$ 4.82M</div>
+                        <span class="text-[10px] text-agro-primary mt-1 block"><i class="fa-solid fa-chevron-up"></i> Margem Líquida: 31.4%</span>
+                    </div>
+                    <div class="bg-agro-card border border-agro-border p-5 rounded-xl">
+                        <div class="text-gray-500 flex justify-between items-center mb-2"><span>TAXA INFECTANTE REBANHO</span><i class="fa-solid fa-stethoscopes text-agro-primary"></i></div>
+                        <div class="text-xl font-bold text-white">0.02%</div>
+                        <span class="text-[10px] text-agro-primary mt-1 block"><i class="fa-solid fa-check"></i> Zona Segura de Controle</span>
+                    </div>
+                    <div class="bg-agro-card border border-agro-border p-5 rounded-xl">
+                        <div class="text-gray-500 flex justify-between items-center mb-2"><span>BALANÇO CARBONO (ESG)</span><i class="fa-solid fa-cloud text-emerald-400"></i></div>
+                        <div class="text-xl font-bold text-white">-1.420 <span class="text-xs font-light text-gray-400">t/CO2eq</span></div>
+                        <span class="text-[10px] text-emerald-400 mt-1 block"><i class="fa-solid fa-leaf"></i> Propriedade Carbono Negativa</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-agro-card border border-agro-border rounded-xl p-6">
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-gray-400 mb-4"><i class="fa-solid fa-chart-line text-agro-primary mr-1.5"></i> Curva Produtiva vs Crédito de Carbono</h4>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="chart-produtividade"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-agro-card border border-agro-border rounded-xl p-6">
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-gray-400 mb-4"><i class="fa-solid fa-chart-pie text-agro-accent mr-1.5"></i> Distribuição Orçamentária e Custos de Manejo</h4>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="chart-financeiro"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-terminal" class="py-24 border-t border-agro-border/40">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-flex items-center gap-2 bg-agro-primary/10 border border-agro-primary/30 px-3 py-1 rounded-md text-xs font-mono text-agro-primary font-bold uppercase">
+                            <i class="fa-solid fa-brain animate-pulse"></i> Cognitive Agro-Engine
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">Assistente Virtual Especializado</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Nossa inteligência artificial foi treinada com dados agronômicos consolidados, artigos peer-reviewed e manuais de zootecnia de precisão. Digite suas dúvidas para receber recomendações instantâneas.
+                        </p>
+                        
+                        <div class="space-y-2 font-mono text-[11px]">
+                            <span class="text-gray-500 block">EXEMPLOS DE COMANDO EXECUTÁVEIS:</span>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="injectAiPrompt('Como corrigir solo com baixa fertilidade?')" class="bg-agro-card border border-agro-border px-2.5 py-1.5 rounded-lg text-gray-300 hover:border-agro-primary transition-colors text-left">💡 Correção de Solo</button>
+                                <button onclick="injectAiPrompt('Qual ração premium sugerida para gado de leite em lactação?')" class="bg-agro-card border border-agro-border px-2.5 py-1.5 rounded-lg text-gray-300 hover:border-agro-primary transition-colors text-left">🥩 Nutrição Animal</button>
+                                <button onclick="injectAiPrompt('Como identificar pragas na cultura da soja por imagem?')" class="bg-agro-card border border-agro-border px-2.5 py-1.5 rounded-lg text-gray-300 hover:border-agro-primary transition-colors text-left">🪲 Identificação de Pragas</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 bg-agro-card border border-agro-border rounded-2xl flex flex-col h-[480px] overflow-hidden shadow-2xl">
+                        <div class="bg-black/40 border-b border-agro-border/60 px-6 py-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2.5 h-2.5 rounded-full bg-agro-primary animate-pulse"></div>
+                                <span class="font-mono text-xs font-bold text-white">AETHEL_CORE_BOT v2.1</span>
+                            </div>
+                            <span class="text-[10px] font-mono text-gray-500">LLM AGRO-OPTIMIZED</span>
                         </div>
                         
-                        <div class="my-8 flex flex-col md:flex-row items-center justify-around gap-8">
-                            <div class="relative w-64 h-64 bg-white/5 rounded-2xl border border-white/5 flex items-center justify-center font-bold text-gray-600 shadow-inner overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-br from-agro-green/20 to-transparent"></div>
-                                <i class="fa-solid fa-map-location-dot text-7xl text-agro-neon/40 animate-pulse"></i>
-                                <div class="absolute bottom-2 left-2 bg-black/60 px-2 py-1 rounded text-[10px] font-mono text-gray-400">Lat: -15.79 | Lon: -47.88</div>
-                            </div>
-                            <div class="flex-1 space-y-3 max-w-sm">
-                                <h4 class="text-lg font-bold text-white" id="region-title">Mato Grosso & Goiás</h4>
-                                <p class="text-sm text-gray-400 leading-relaxed font-mono text-xs" id="region-description">
-                                    Região Centro-Oeste registrando recorde de produção de soja com colheita em 94%. Solo com excelentes índices de nitrogênio.
-                                </p>
+                        <div class="flex-grow p-6 overflow-y-auto space-y-4 font-mono text-xs text-gray-300" id="ai-chat-box">
+                            <div class="bg-agro-surface border border-agro-border p-4 rounded-xl max-w-[85%]">
+                                <span class="text-[10px] text-agro-primary block font-bold mb-1">AETHEL CORE:</span>
+                                Saudações, operador. Estou pronto para fornecer recomendações climáticas, interpretar análises estruturais de solo, sugerir dietas animais e calibrar fluxos de gestão. Como posso otimizar sua fazenda hoje?
                             </div>
                         </div>
 
-                        <div class="bg-agro-card border border-white/5 rounded-xl p-3 text-xs font-mono text-gray-400 flex justify-between items-center">
-                            <span><i class="fa-solid fa-satellite-dish text-agro-gold mr-1"></i> Satélite: Sentinel-2 Ativo</span>
-                            <span class="text-agro-neon font-bold">Dados Operacionais</span>
+                        <div class="p-4 bg-black/40 border-t border-agro-border/60">
+                            <form onsubmit="handleAiQuery(event)" class="flex gap-2">
+                                <input type="text" id="ai-input-field" placeholder="Escreva sua dúvida técnica ou operacional..." required class="flex-grow bg-agro-bg border border-agro-border rounded-xl p-3 text-xs text-white focus:outline-none focus:border-agro-primary font-mono placeholder:text-gray-600">
+                                <button type="submit" class="bg-agro-primary hover:bg-emerald-500 text-black font-bold px-5 rounded-xl text-xs transition-colors"><i class="fa-solid fa-paper-plane"></i></button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="marketplace" class="py-24 border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+        <section id="marketplace" class="py-24 border-t border-agro-border/40 bg-agro-surface/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
                     <div class="space-y-2">
-                        <div class="inline-block bg-agro-gold/10 border border-agro-gold/20 text-agro-gold px-3 py-1 rounded-md text-xs font-mono font-bold">ECOSSISTEMA DE VENDAS B2B</div>
-                        <h2 class="text-3xl font-extrabold tracking-tight text-white">Marketplace AgroVision</h2>
-                        <p class="text-sm text-gray-400">Soluções tecnológicas de ponta e insumos agrícolas homologados com entrega garantida.</p>
+                        <span class="text-xs font-mono text-agro-accent uppercase tracking-widest">// DISTRIBUIÇÃO E SUPRIMENTOS B2B</span>
+                        <h2 class="text-3xl font-extrabold text-white tracking-tight">Pregão Unificado de Insumos</h2>
+                        <p class="text-sm text-gray-400">Adquira insumos de precisão, sementes bio-certificadas e maquinário pesado com rastreabilidade criptográfica.</p>
                     </div>
-                    <div class="bg-white/5 border border-white/10 p-2 rounded-xl text-xs font-mono font-bold flex gap-4">
-                        <span>Carrinho: <span class="text-agro-neon" id="cart-count">0</span> itens</span>
+
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <button onclick="filterMarketplaceProducts('todos', this)" class="mkt-filter-btn bg-white text-black px-4 py-2 rounded-xl font-bold transition-all">Todos os Itens</button>
+                        <button onclick="filterMarketplaceProducts('agricultura', this)" class="mkt-filter-btn bg-agro-card border border-agro-border text-gray-400 px-4 py-2 rounded-xl transition-all hover:text-white">Agricultura</button>
+                        <button onclick="filterMarketplaceProducts('pecuaria', this)" class="mkt-filter-btn bg-agro-card border border-agro-border text-gray-400 px-4 py-2 rounded-xl transition-all hover:text-white">Pecuária</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
-                        <div class="space-y-4">
-                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-                                🛸
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="marketplace-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section id="conhecimento" class="py-24 border-t border-agro-border/40">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-16 space-y-2">
+                    <span class="text-xs font-mono text-agro-primary uppercase tracking-widest">// CAPACITAÇÃO E EXCELÊNCIA ACADÊMICA</span>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Hub de Difusão e Mídia Agro</h2>
+                    <p class="text-sm text-gray-400">Artigos científicos revisados por pares, e-books operacionais, podcasts regulatórios e trilhas educacionais livres.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 space-y-6">
+                        <h4 class="text-xs font-mono uppercase text-gray-500 border-b border-agro-border pb-2 tracking-widest"><i class="fa-solid fa-file-invoice mr-1.5"></i> Periódicos e Notícias Oficiais</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="knowledge-posts-container">
                             </div>
-                            <div>
-                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Drones & Hardware</span>
-                                <h3 class="text-base font-bold text-white mt-1">Drone Multiespectral Vision-X</h3>
-                                <p class="text-xs text-gray-400 mt-1">Mapeamento aéreo completo de estresse hídrico e NDVI.</p>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                            <span class="text-lg font-black text-white font-mono">R$ 14.500</span>
-                            <button onclick="addToCart('Drone Vision-X')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
-                                <i class="fa-solid fa-cart-plus"></i> Comprar
-                            </button>
-                        </div>
                     </div>
 
-                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
-                        <div class="space-y-4">
-                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-                                🌡️
+                    <div class="lg:col-span-4 space-y-6">
+                        <h4 class="text-xs font-mono uppercase text-gray-500 border-b border-agro-border pb-2 tracking-widest"><i class="fa-solid fa-photo-film mr-1.5"></i> Streaming e Multimídia</h4>
+                        <div class="space-y-3" id="knowledge-media-sidebar">
                             </div>
-                            <div>
-                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">IoT / Sensores</span>
-                                <h3 class="text-base font-bold text-white mt-1">Sensor de Solo Subterrâneo Pro</h3>
-                                <p class="text-xs text-gray-400 mt-1">Mede umidade, salinidade e temperatura de hora em hora.</p>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                            <span class="text-lg font-black text-white font-mono">R$ 890<span class="text-xs text-gray-400 font-normal">/un</span></span>
-                            <button onclick="addToCart('Sensor Pro')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
-                                <i class="fa-solid fa-cart-plus"></i> Comprar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
-                        <div class="space-y-4">
-                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-                                🧪
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Bioinsumos</span>
-                                <h3 class="text-base font-bold text-white mt-1">BioFertilizante UltraN-10</h3>
-                                <p class="text-xs text-gray-400 mt-1">Acelerador biológico orgânico focado em alta produtividade.</p>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                            <span class="text-lg font-black text-white font-mono">R$ 2.400<span class="text-xs text-gray-400 font-normal">/ton</span></span>
-                            <button onclick="addToCart('BioFertilizante')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
-                                <i class="fa-solid fa-cart-plus"></i> Comprar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-agro-card border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-agro-neon transition-all duration-300 group">
-                        <div class="space-y-4">
-                            <div class="bg-white/5 h-40 rounded-xl flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-                                📡
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-mono text-agro-neon font-bold uppercase tracking-wider block">Conectividade</span>
-                                <h3 class="text-base font-bold text-white mt-1">Antena Campo-Sat Rural</h3>
-                                <p class="text-xs text-gray-400 mt-1">Roteador via satélite robusto para áreas sem cobertura móvel.</p>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                            <span class="text-lg font-black text-white font-mono">R$ 3.100</span>
-                            <button onclick="addToCart('Antena Satelital')" class="bg-agro-neon hover:bg-emerald-500 text-agro-dark p-2.5 rounded-xl font-bold transition-colors text-xs">
-                                <i class="fa-solid fa-cart-plus"></i> Comprar
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="ia-diagnostico" class="py-24 bg-gradient-to-b from-agro-dark to-black/60 border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                    <h2 class="text-xs font-bold text-agro-neon uppercase tracking-widest">Fisiosanidade Computacional</h2>
-                    <p class="text-3xl font-bold tracking-tight text-white">IA Diagnóstica de Fitopatologias</p>
-                    <p class="text-gray-400">Simule a análise de campo enviando amostras foliares para nossa rede neural.</p>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <div class="bg-white/[0.02] border border-white/10 rounded-3xl p-8 flex flex-col justify-between items-center text-center border-dashed border-gray-600 hover:border-agro-neon transition-all cursor-pointer" onclick="simulateAIAnalysis()">
-                        <div class="my-auto space-y-4">
-                            <div class="w-16 h-16 bg-agro-neon/10 text-agro-neon rounded-2xl flex items-center justify-center text-2xl mx-auto border border-agro-neon/20">
-                                <i class="fa-solid fa-camera"></i>
-                            </div>
-                            <div>
-                                <p class="text-base font-bold text-white">Simular Envio de Foto Foliar</p>
-                                <p class="text-xs text-gray-500 mt-1">Carregar espécime de Soja, Milho ou Algodão</p>
-                            </div>
-                        </div>
-                        <p class="text-[11px] font-mono text-agro-gold bg-agro-gold/10 px-3 py-1 rounded-full mt-6">Clique no card para disparar análise preditiva</p>
-                    </div>
-                    <div class="bg-black/40 border border-white/10 rounded-3xl p-6 space-y-4" id="ia-report-box">
-                        <div class="border-b border-white/5 pb-4 flex justify-between items-center">
-                            <span class="text-xs font-mono text-gray-400">VISION_REPORTS_V4</span>
-                            <span class="text-xs font-mono text-gray-500" id="report-status">Aguardando Amostra...</span>
-                        </div>
-                        <div class="space-y-4 font-mono text-xs text-gray-400" id="report-content">
-                            <p class="text-center py-12 text-gray-600">Nenhuma amostra processada.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="solucoes" class="py-24 border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
-                    <h2 class="text-xs font-bold text-agro-neon uppercase tracking-widest">Matriz Comercial</h2>
-                    <p class="text-3xl font-bold tracking-tight text-white">Nossos Pilares Tecnológicos</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
-                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-chart-pie"></i></div>
-                        <h3 class="text-lg font-bold text-white">Analytics Preditivo</h3>
-                        <p class="text-sm text-gray-400">Modelos matemáticos cruzando dados de clima histórico e sensores locais.</p>
-                    </div>
-                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
-                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-layer-group"></i></div>
-                        <h3 class="text-lg font-bold text-white">Integração Total APIs</h3>
-                        <p class="text-sm text-gray-400">Conectividade fluida com os principais ERPs e maquinários John Deere e Case.</p>
-                    </div>
-                    <div class="bg-agro-card border border-white/10 p-6 rounded-2xl space-y-3">
-                        <div class="text-agro-neon text-2xl"><i class="fa-solid fa-leaf"></i></div>
-                        <h3 class="text-lg font-bold text-white">Foco ESG & Carbono</h3>
-                        <p class="text-sm text-gray-400">Certificação e relatórios para crédito de carbono rural automatizados.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contato" class="py-24 border-t border-white/5 bg-agro-card/20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    <div class="lg:col-span-5 space-y-6">
-                        <div class="inline-block bg-agro-neon/10 border border-agro-neon/20 text-agro-neon px-3 py-1 rounded-md text-xs font-mono font-bold">STARTUP HUB CONEXÃO</div>
-                        <h2 class="text-4xl font-extrabold tracking-tight text-white">Fale com nossa equipe institucional</h2>
-                        <p class="text-sm text-gray-400">Seja você um investidor de Venture Capital, parceiro corporativo ou grande produtor rural, mande uma mensagem para receber nosso Pitch Deck comercial completo.</p>
-                        <div class="space-y-4 font-mono text-xs text-gray-400">
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-envelope text-agro-neon text-base"></i> contato@agrovision.co</div>
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-phone text-agro-neon text-base"></i> +55 (11) 99999-8888</div>
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-agro-neon text-base"></i> San Pedro Valley, Belo Horizonte - MG</div>
-                        </div>
-                    </div>
-                    
-                    <div class="lg:col-span-7 bg-agro-card border border-white/10 p-8 rounded-3xl shadow-xl">
-                        <form id="contact-form" onsubmit="handleContact(event)" class="space-y-4 font-mono text-xs">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-gray-400 mb-1">Seu Nome</label>
-                                    <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-400 mb-1">Seu E-mail corporate</label>
-                                    <input type="email" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-gray-400 mb-1">Perfil Corporativo</label>
-                                <select class="w-full bg-agro-dark border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon cursor-pointer">
-                                    <option value="produtor">Produtor Rural Enterprise</option>
-                                    <option value="investidor">Venture Capital / Investidor</option>
-                                    <option value="parceiro">Distribuidor / Fabricante</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-400 mb-1">Mensagem ou Intenção comercial</label>
-                                <textarea rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-agro-neon hover:bg-emerald-500 text-agro-dark font-extrabold py-3.5 rounded-xl transition-all uppercase tracking-wider text-xs">
-                                <i class="fa-solid fa-paper-plane mr-2"></i>Enviar Solicitação
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer class="bg-black py-8 border-t border-white/5 text-center font-mono text-[11px] text-gray-500">
-        <p>&copy; 2026 AgroVision AgTech S.A. Todos os direitos reservados. Made for Tech Pitch Boards.</p>
+    <footer class="bg-black py-12 border-t border-agro-border/40 font-mono text-[11px] text-gray-600 text-center space-y-3 px-6">
+        <p class="text-gray-400 font-sans text-xs">Aethel AgroOS S.A. • Soluções Digitais Sustentáveis Homologadas</p>
+        <p>&copy; 2026 Todos os direitos reservados. Relatórios de conformidade e pegada ESG auditados de forma transparente.</p>
     </footer>
 
-    <div id="login-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-agro-card border border-white/10 rounded-3xl p-8 max-w-sm w-full mx-4 relative space-y-6">
-            <button onclick="closeModal('login-modal')" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-lg">&times;</button>
-            <div class="text-center">
-                <h3 class="text-xl font-bold text-white">Acesse o Ecossistema</h3>
-                <p class="text-xs text-gray-400 mt-1">Selecione o método de entrada corporativa</p>
+    <div id="favorites-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-agro-card border border-agro-border rounded-2xl p-6 max-w-md w-full mx-4 space-y-4 font-mono text-xs">
+            <div class="flex justify-between items-center border-b border-agro-border/60 pb-3">
+                <span class="text-white font-bold"><i class="fa-solid fa-heart text-agro-alert mr-1.5"></i> Seus Favoritos Marcados</span>
+                <button onclick="closeFavModal()" class="text-gray-500 hover:text-white font-bold text-base">&times;</button>
             </div>
-            
-            <div class="space-y-3 font-mono text-xs">
-                <button onclick="handleGoogleLogin()" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 text-xs border border-gray-300">
-                    <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" alt="Google Logo" class="w-4 h-4">
-                    Entrar com o Google
-                </button>
-                
-                <div class="relative flex py-2 items-center text-gray-500 text-[10px] uppercase font-bold">
-                    <div class="flex-grow border-t border-white/5"></div>
-                    <span class="flex-shrink mx-4">Ou via credencial</span>
-                    <div class="flex-grow border-t border-white/5"></div>
-                </div>
-
-                <div>
-                    <input type="text" placeholder="ID do Produtor (NIRF)" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
-                </div>
-                <div>
-                    <input type="password" placeholder="Chave de Acesso" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-agro-neon">
-                </div>
-                <button onclick="alert('Autenticação padrão simulada!')" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-[11px] mt-2">
-                    Entrar via Intranet
-                </button>
+            <div id="fav-modal-list" class="space-y-2 text-gray-400 max-h-60 overflow-y-auto">
+                Nenhum produto favoritado até o momento.
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+
+    <script>
+        // 1. BANCO DE DADOS INTEGRADO (MATRIZ DA PLATAFORMA)
+        const appDatabase = {
+            matrix: {
+                agricultura: [
+                    { prob: "Secas e mudanças climáticas", sols: ["Previsão climática inteligente", "Alertas meteorológicos", "Irrigação automatizada", "Recomendações por IA"] },
+                    { prob: "Erosão do solo", sols: ["Monitoramento do solo", "Guias de conservação", "Técnicas de plantio direto"] },
+                    { prob: "Compactação do solo", sols: ["Diagnóstico digital", "Recomendações técnicas", "Monitoramento contínuo"] },
+                    { prob: "Baixa fertilidade do solo", sols: ["Calculadora de adubação", "Interpretação de análise de solo", "Recomendações personalizadas"] },
+                    { prob: "Pragas e doenças", sols: ["Sistema de identificação por Inteligência Artificial", "Upload de imagens", "Diagnóstico automático", "Sugestões de tratamento"] },
+                    { prob: "Baixa produtividade", sols: ["Relatórios inteligentes", "Agricultura de precisão", "Monitoramento por sensores"] },
+                    { prob: "Perda de nutrientes", sols: ["Alertas automáticos", "Planejamento de manejo"] },
+                    { prob: "Falta de informação técnica", sols: ["Biblioteca digital", "Cursos online", "Artigos especializados", "Assistente virtual agrícola"] }
+                ],
+                pecuaria: [
+                    { prob: "Mortalidade animal", sols: ["Calendário sanitário", "Controle de vacinação", "Alertas preventivos"] },
+                    { prob: "Doenças no rebanho", sols: ["Sistema inteligente de diagnóstico", "Histórico veterinário", "Monitoramento de saúde animal"] },
+                    { prob: "Baixo ganho de peso", sols: ["Recomendações nutricionais", "Controle alimentar", "Sugestões de rações premium"] },
+                    { prob: "Falta de controle reprodutivo", sols: ["Gestão reprodutiva", "Controle de inseminação", "Histórico genético"] },
+                    { prob: "Má alimentação animal", sols: ["Catálogo de rações premium", "Calculadora nutricional", "Recomendações por espécie"] }
+                ],
+                gestao: [
+                    { prob: "Falta de controle financeiro", sols: ["Fluxo de caixa", "Relatórios financeiros", "Dashboard administrativo"] },
+                    { prob: "Endividamento rural", sols: ["Educação financeira", "Planejamento de custos", "Simulador de investimentos"] },
+                    { prob: "Dificuldade de gestão da propriedade", sols: ["Gestão completa da fazenda", "Controle de estoque", "Controle de funcionários", "Controle de máquinas"] }
+                ],
+                logistica: [
+                    { prob: "Alto custo de transporte", sols: ["Comparador de fretes", "Sistema de logística inteligente"] },
+                    { prob: "Estradas rurais precárias", sols: ["Mapa colaborativo", "Informações em tempo real"] },
+                    { prob: "Perda de carga", sols: ["Rastreamento em tempo real", "Gestão de transporte"] }
+                ],
+                sustentabilidade: [
+                    { prob: "Desperdício de água", sols: ["Irrigação inteligente", "Monitoramento hídrico", "Calculadora de consumo"] },
+                    { prob: "Emissão de carbono", sols: ["Calculadora de carbono", "Relatórios sustentáveis"] },
+                    { prob: "Desmatamento", sols: ["Educação ambiental", "Programas de reflorestamento"] },
+                    { prob: "Desperdício de alimentos", sols: ["Plataforma de doação", "Conexão entre produtores e instituições", "Redução de perdas alimentares"] }
+                ],
+                sociais: [
+                    { prob: "Êxodo rural", sols: ["Capacitação tecnológica", "Oportunidades de negócios"] },
+                    { prob: "Falta de sucessão familiar", sols: ["Formação de jovens produtores", "Cursos de empreendedorismo rural"] },
+                    { prob: "Falta de mão de obra qualificada", sols: ["Plataforma de cursos", "Banco de talentos rurais"] }
+                ]
+            },
+            mapGeo: {
+                co: { name: "Região Centro-Oeste", alert: "RISCO DE SECA: BAIXO", clima: "28°C • Úmido", prod: "Soja e Milho Safrinha", pec: "Corte (Confinamento)", seca: "0.2% Talhões", queima: "Nenhum Foco Act.", ind: "9.6/10 Est." },
+                sp: { name: "Região Sudeste (SP/MG)", alert: "RISCO DE SECA: MÉDIO", clima: "23°C • Estável", prod: "Cana e Café Especial", pec: "Leite e Genética", seca: "2.4% Talhões", queima: "1 Alerta Ident.", ind: "8.9/10 Est." },
+                sul: { name: "Região Sul", alert: "RISCO DE SECA: CRÍTICO", clima: "14°C • Frente Fria", prod: "Trigo, Cevada e Maçã", pec: "Suinocultura e Aves", seca: "11.8% Talhões", queima: "Nenhum Foco Act.", ind: "7.5/10 Est." },
+                ne: { name: "Matopiba & Nordeste", alert: "RISCO DE SECA: ALTO", clima: "31°C • Seco", prod: "Algodão e Fruticultura", pec: "Caprinocultura", seca: "8.1% Talhões", queima: "3 Focos Controlados", ind: "8.2/10 Est." }
+            },
+            products: [
+                { id: 1, name: "Sementes Soja Híbrida BioMax", cat: "agricultura", price: 420, stock: 250, rate: 4.9, img: "🌱", desc: "Altíssima taxa de germinação com proteção nativa contra estresse hídrico." },
+                { id: 2, name: "Fertilizante NPK Nitrogênio Ativo", cat: "agricultura", price: 2100, stock: 45, rate: 4.8, img: "🧪", desc: "Composto químico premium granulado para rápida absorção radicular." },
+                { id: 3, name: "Pivô Central de Irrigação IoT", cat: "agricultura", price: 92000, stock: 4, rate: 5.0, img: "💦", desc: "Gerenciamento automatizado por sensores de umidade de solo integrados." },
+                { id: 4, name: "Trator Autônomo Aethel Vision-T", cat: "agricultura", price: 680000, stock: 2, rate: 4.9, img: "🚜", desc: "Direcionamento georreferenciado via satélite por nível centimétrico." },
+                { id: 5, name: "Kit Trado e Amostradores Rurais", cat: "agricultura", price: 780, stock: 120, rate: 4.6, img: "🛠️", desc: "Conjunto forjado em aço carbono para amostragem de horizontes de solo." },
+                { id: 6, name: "Ração Premium Lactação Max", cat: "pecuaria", price: 135, stock: 380, rate: 4.9, img: "🌾", desc: "Formulação balanceada para gado leiteiro visando conversão e sólidos totais." },
+                { id: 7, name: "Suplemento Mineral Quelatado Fos", cat: "pecuaria", price: 195, stock: 140, rate: 4.7, img: "🪨", desc: "Macro e microminerais de alta biodisponibilidade para ganho de peso." },
+                { id: 8, name: "Ultrassom Veterinário Slim HD", cat: "pecuaria", price: 16400, stock: 6, rate: 4.9, img: "📟", desc: "Equipamento portátil de alta definição para diagnóstico gestacional precoce." },
+                { id: 9, name: "Central Eletrificadora de Cerca S10", cat: "pecuaria", price: 850, stock: 24, rate: 4.4, img: "⚡", desc: "Monitoramento perimetral inteligente com alerta de fuga ou quebra de fio." },
+                { id: 10, name: "Bebedouro Inox Automático Valvulado", cat: "pecuaria", price: 1250, stock: 18, rate: 4.8, img: "🚰", desc: "Nível mecânico constante com higienização simplificada para confinamentos." }
+            ],
+            knowledge: {
+                posts: [
+                    { tag: "Blog Agro", title: "O Impacto da IA na Rotação de Culturas", text: "Como algoritmos generativos aumentam a previsibilidade das safras no Cerrado.", read: "5 min" },
+                    { tag: "Notícias", title: "Novo Marco Regulatório de Créditos de Carbono", text: "Produtores rurais sustentáveis podem emitir CPRs verdes de maneira desburocrática.", read: "3 min" },
+                    { tag: "Artigos Científicos", title: "Análise Estocástica de Nutrientes em Latossolos", text: "Artigo completo sobre lixiviação fosfatada e reposição estrutural por talhão.", read: "12 min" },
+                    { tag: "Guias de Cultivo", title: "Manejo Biológico Definitivo do Milho", text: "Passo a passo contra a cigarrinha-do-milho utilizando parasitoides naturais.", read: "7 min" },
+                    { tag: "Guias Pecuários", title: "Protocolo de Suplementação Estratégica", text: "Nutrição balanceada para manutenção de peso no período de transição seca-águas.", read: "9 min" }
+                ],
+                media: [
+                    { type: "Cursos Online", title: "Especialização Avançada em Agricultura 4.0", icon: "fa-graduation-cap" },
+                    { type: "E-books", title: "Manual Prático de Visão Computacional no Campo", icon: "fa-book" },
+                    { type: "Podcasts", title: "AgroTalk #89 - Gestão Financeira e Redução de Alavancagem", icon: "fa-microphone" },
+                    { type: "Vídeos Educativos", title: "Configuração de Sensores IoT de Umidade do Solo", icon: "fa-video" }
+                ]
+            }
+        };
+
+        // ESTADOS DO CLIENTE
+        let cart = [];
+        let favorites = [];
+        let currentMatrixCat = 'agricultura';
+
+        // INICIALIZAÇÃO DA APLICAÇÃO
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMatrixProblems();
+            renderMarketplace();
+            renderKnowledgeHub();
+            initCharts();
+        });
+
+        // 2. LOGICA DA MATRIZ INTERATIVA
+        function switchMatrixCategory(cat, btn) {
+            currentMatrixCat = cat;
+            document.querySelectorAll('.matrix-cat-btn').forEach(b => {
+                b.className = "matrix-cat-btn bg-agro-card border border-agro-border text-gray-400 px-5 py-3 rounded-xl font-bold transition-all hover:text-white";
+            });
+            btn.className = "matrix-cat-btn bg-agro-primary text-black px-5 py-3 rounded-xl font-bold transition-all";
+            renderMatrixProblems();
+        }
+
+        function renderMatrixProblems() {
+            const container = document.getElementById('matrix-problems-list');
+            container.innerHTML = "";
+            const items = appDatabase.matrix[currentMatrixCat];
+            
+            items.forEach((item, index) => {
+                const button = document.createElement('button');
+                button.className = `matrix-item-btn w-full text-left p-4 rounded-xl flex justify-between items-center transition-all border ${index === 0 ? 'bg-agro-primary/10 border-agro-primary text-white font-bold' : 'bg-agro-surface border-agro-border text-gray-400 hover:text-white hover:border-gray-700'}`;
+                button.onclick = () => selectMatrixProblem(item, button);
+                button.innerHTML = `<span><i class="fa-solid fa-circle-nodes text-agro-primary mr-2"></i> ${item.prob}</span> <i class="fa-solid fa-chevron-right text-gray-600 text-[10px]"></i>`;
+                container.appendChild(button);
+                
+                if(index === 0) {
+                    displayMatrixSolution(item);
+                }
+            });
+        }
+
+        function selectMatrixProblem(item, button) {
+            document.querySelectorAll('.matrix-item-btn').forEach(b => {
+                b.className = "matrix-item-btn w-full text-left p-4 rounded-xl flex justify-between items-center transition-all border bg-agro-surface border-agro-border text-gray-400 hover:text-white hover:border-gray-700";
+            });
+            button.className = "matrix-item-btn w-full text-left p-4 rounded-xl flex justify-between items-center transition-all border bg-agro-primary/10 border-agro-primary text-white font-bold";
+            displayMatrixSolution(item);
+        }
+
+        function displayMatrixSolution(item) {
+            document.getElementById('matrix-display-title').innerText = item.prob;
+            const container = document.getElementById('matrix-display-solutions');
+            container.innerHTML = "";
+            
+            item.sols.forEach(sol => {
+                const card = document.createElement('div');
+                card.className = "bg-agro-surface border border-agro-border/80 p-4 rounded-xl flex items-start gap-2.5";
+                card.innerHTML = `<i class="fa-solid fa-square-check text-agro-primary mt-0.5"></i> <span class="text-xs text-gray-300 font-medium">${sol}</span>`;
+                container.appendChild(card);
+            });
+        }
+
+        // 3. LOGICA DO MAPA GEOMATRIX
+        function triggerMapRegion(regionKey) {
+            document.querySelectorAll('.map-trigger-btn').forEach(b => {
+                b.className = "map-trigger-btn w-full text-left bg-agro-surface border border-agro-border p-3 rounded-xl flex justify-between items-center text-gray-400 hover:text-white transition-colors";
+                b.querySelector('i').className = "fa-solid fa-chevron-right text-gray-600";
+            });
+            
+            const eventBtn = event.currentTarget;
+            eventBtn.className = "map-trigger-btn w-full text-left bg-agro-card border border-agro-primary p-3 rounded-xl flex justify-between items-center text-white font-bold";
+            eventBtn.querySelector('i').className = "fa-solid fa-chevron-right text-agro-primary";
+
+            const info = appDatabase.mapGeo[regionKey];
+            document.getElementById('map-region-name').innerText = info.name;
+            document.getElementById('map-region-alert').innerText = info.alert;
+            document.getElementById('map-val-clima').innerText = info.clima;
+            document.getElementById('map-val-prod').innerText = info.prod;
+            document.getElementById('map-val-pec').innerText = info.pec;
+            document.getElementById('map-val-seca').innerText = info.seca;
+            document.getElementById('map-val-queima').innerText = info.queima;
+            document.getElementById('map-val-ind').innerText = info.ind;
+
+            if (info.alert.includes('CRÍTICO') || info.alert.includes('ALTO')) {
+                document.getElementById('map-region-alert').className = "bg-agro-alert/10 text-agro-alert border border-agro-alert/20 px-2 py-1 rounded";
+            } else {
+                document.getElementById('map-region-alert').className = "bg-agro-primary/10 text-agro-primary border border-agro-primary/20 px-2 py-1 rounded";
+            }
+        }
+
+        // 4. MÓDULO TERMINAL INTELIGÊNCIA ARTIFICIAL
+        function injectAiPrompt(text) {
+            document.getElementById('ai-input-field').value = text;
+        }
+
+        function handleAiQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input-field');
+            const userText = input.value.trim();
+            if(!userText) return;
+
+            const chatBox = document.getElementById('ai-chat-box');
+            
+            // Append User Msg
+            const userDiv = document.createElement('div');
+            userDiv.className = "bg-agro-border/40 border border-agro-border/80 p-4 rounded-xl max-w-[85%] ml-auto text-right text-white";
+            userDiv.innerHTML = `<span class="text-[10px] text-agro-accent block font-bold mb-1">OPERADOR RURAL:</span> ${userText}`;
+            chatBox.appendChild(userDiv);
+            
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simular Processamento Cognitivo da LLM Agro
+            setTimeout(() => {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = "bg-agro-surface border border-agro-border p-4 rounded-xl max-w-[85%]";
+                
+                let response = "Análise concluída. Com base nas matrizes mapeadas pelo Aethel AgroOS, recomendamos efetuar o monitoramento preditivo de umidade foliar e verificar a calibragem do barramento do pulverizador B2B.";
+                
+                if (userText.toLowerCase().includes('fertilidade') || userText.toLowerCase().includes('solo')) {
+                    response = "Interpretação Concluída: Solos sob baixa fertilidade exigem imediata calagem baseada em saturação por bases (V%). Utilize nossa Calculadora de Adubação e verifique no Marketplace os compostos organominerais fosfatados com liberação controlada.";
+                } else if (userText.toLowerCase().includes('ração') || userText.toLowerCase().includes('nutrição')) {
+                    response = "Recomendação Nutren: Para bovinos de alta lactação, sugere-se a Ração Premium Lactação Max (disponível em nosso pregão). Ela possui aminoácidos protegidos e minerais quelatados que aumentam a eficiência de conversão do rebanho.";
+                } else if (userText.toLowerCase().includes('praga') || userText.toLowerCase().includes('imagem')) {
+                    response = "Protocolo Fitossanitário: Nosso sistema de visão computacional identificou padrões correspondentes a pragas foliares precoces. Sugere-se aplicação focalizada com mapeamento de sensores IoT a taxas variáveis.";
+                }
+
+                aiDiv.innerHTML = `<span class="text-[10px] text-agro-primary block font-bold mb-1">AETHEL CORE:</span> ${response}`;
+                chatBox.appendChild(aiDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+
+        // 5. ENGINE DE NEGÓCIOS / MARKETPLACE
+        function renderMarketplace(filter = 'todos') {
+            const grid = document.getElementById('marketplace-grid');
+            grid.innerHTML = "";
+            const list = filter === 'todos' ? appDatabase.products : appDatabase.products.filter(p => p.cat === filter);
+            
+            list.forEach(p => {
+                const isFav = favorites.includes(p.id);
+                const card = document.createElement('div');
+                card.className = "bg-agro-card border border-agro-border rounded-xl p-5 flex flex-col justify-between hover:border-agro-primary transition-all duration-300 relative group glow-green";
+                card.innerHTML = `
+                    <button onclick="toggleFavorite(${p.id})" class="absolute top-4 right-4 text-xs z-10 transition-colors ${isFav ? 'text-agro-alert' : 'text-gray-600 hover:text-white'}">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                    <div class="space-y-3.5">
+                        <div class="bg-agro-surface h-36 rounded-lg flex items-center justify-center text-4xl border border-agro-border/60">
+                            ${p.img}
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-[10px]">
+                                <span class="text-agro-primary uppercase font-bold tracking-wider">${p.cat}</span>
+                                <span class="text-agro-accent"><i class="fa-solid fa-star"></i> ${p.rate.toFixed(1)}</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white mt-1 group-hover:text-agro-primary transition-colors">${p.name}</h3>
+                            <p class="text-[11px] text-gray-500 font-mono mt-1 leading-normal line-clamp-2">${p.desc}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-agro-border/60 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold text-sm">R$ ${p.price.toLocaleString('pt-BR')}</span>
+                            <span class="text-[10px] text-gray-500">Estoque: ${p.stock} un</span>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="w-full bg-agro-border hover:bg-agro-primary border border-agro-primary/20 hover:text-black text-gray-200 font-bold py-2 rounded-lg transition-colors uppercase text-[10px] tracking-wider">
+                            <i class="fa-solid fa-cart-plus mr-1"></i> Comprar Lote
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterMarketplaceProducts(cat, btn) {
+            document.querySelectorAll('.mkt-filter-btn').forEach(b => {
+                b.className = "mkt-filter-btn bg-agro-card border border-agro-border text-gray-400 px-4 py-2 rounded-xl transition-all hover:text-white";
+            });
+            btn.className = "mkt-filter-btn bg-white text-black px-4 py-2 rounded-xl font-bold transition-all";
+            renderMarketplace(cat);
+        }
+
+        function addToCart(id) {
+            cart.push(id);
+            document.getElementById('cart-counter').innerText = cart.length;
+            const item = appDatabase.products.find(p => p.id === id);
+            alert(`Lote Comercial Reservado: ${item.name} adicionado ao barramento de compras.`);
+        }
+
+        function toggleFavorite(id) {
+            if(favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            document.getElementById('fav-counter').innerText = favorites.length;
+            renderMarketplace();
+        }
+
+        function openFavModal() {
+            const modal = document.getElementById('favorites-modal');
+            const listContainer = document.getElementById('fav-modal-list');
+            listContainer.innerHTML = "";
+            
+            if(favorites.length === 0) {
+                listContainer.innerText = "Nenhum produto favoritado até o momento.";
+            } else {
+                favorites.forEach(id => {
+                    const item = appDatabase.products.find(p => p.id === id);
+                    const div = document.createElement('div');
+                    div.className = "flex justify-between items-center p-2 border-b border-agro-border/40 text-white";
+                    div.innerHTML = `<span>${item.img} ${item.name}</span><span class="text-agro-primary">R$ ${item.price}</span>`;
+                    listContainer.appendChild(div);
+                });
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeFavModal() {
+            const modal = document.getElementById('favorites-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        // 6. PORTAL DE CAPACITAÇÃO E CONHECIMENTO
+        function renderKnowledgeHub() {
+            const container = document.getElementById('knowledge-posts-container');
+            container.innerHTML = "";
+            
+            appDatabase.knowledge.posts.forEach(p => {
+                const box = document.createElement('div');
+                box.className = "bg-agro-card border border-agro-border/80 p-5 rounded-xl space-y-2";
+                box.innerHTML = `
+                    <span class="text-[9px] font-mono font-bold bg-agro-primary/10 border border-agro-primary/20 text-agro-primary px-2 py-0.5 rounded uppercase">${p.tag}</span>
+                    <h5 class="text-sm font-bold text-white tracking-tight leading-snug">${p.title}</h5>
+                    <p class="text-xs text-gray-400 font-mono line-clamp-2">${p.text}</p>
+                    <div class="pt-2 text-[10px] text-gray-600 font-mono"><i class="fa-regular fa-clock mr-1"></i> ${p.read} de leitura profunda</div>
+                `;
+                container.appendChild(box);
+            });
+
+            const sidebar = document.getElementById('knowledge-media-sidebar');
+            sidebar.innerHTML = "";
+            
+            appDatabase.knowledge.media.forEach(m => {
+                const mediaBox = document.createElement('div');
+                mediaBox.className = "bg-agro-surface border border-agro-border p-3.5 rounded-xl flex items-center gap-3.5 hover:bg-agro-card/60 transition-colors cursor-pointer group";
+                mediaBox.innerHTML = `
+                    <div class="w-9 h-9 bg-agro-border text-agro-primary rounded-lg flex items-center justify-center group-hover:bg-agro-primary group-hover:text-black transition-all">
+                        <i class="fa-solid ${m.icon}"></i>
+                    </div>
+                    <div>
+                        <span class="text-[9px] font-mono text-gray-500 block uppercase tracking-wider">${m.type}</span>
+                        <span class="text-xs font-bold text-gray-200 group-hover:text-white transition-colors block line-clamp-1">${m.title}</span>
+                    </div>
+                `;
+                sidebar.appendChild(mediaBox);
+            });
+        }
+
+        // 7. INICIALIZAÇÃO DE INDICADORES GRÁFICOS (CHART.JS CORPORETE)
+        function initCharts() {
+            // Gráfico de Linha: Produção e Balanço ESG
+            const ctxProd = document.getElementById('chart-produtividade').getContext('2d');
+            new Chart(ctxProd, {
+                type: 'line',
+                data: {
+                    labels: ['Safra 21', 'Safra 22', 'Safra 23', 'Safra 24', 'Safra 25', 'Safra 26 (Proj)'],
+                    datasets: [{
+                        label: 'Produtividade Média (Sacas/ha)',
+                        data: [62, 68, 74, 71, 79, 85],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#1F382A' }, ticks: { color: '#9CA3AF', font: { size: 10 } } },
+                        x: { grid: { color: 'transparent' }, ticks: { color: '#9CA3AF', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Gráfico Donut: Distribuição Financeira
+            const ctxFin = document.getElementById('chart-financeiro').getContext('2d');
+            new Chart(ctxFin, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Insumos / Sementes', 'IoT / Telemetria', 'Manejo Corretivo', 'Logística Corporativa'],
+                    datasets: [{
+                        data: [45, 20, 15, 20],
+                        backgroundColor: ['#10B981', '#34D399', '#F59E0B', '#1F382A'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#E4E7EB', font: { size: 10, family: 'JetBrains Mono' } } }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
